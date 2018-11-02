@@ -1,0 +1,7 @@
+{
+    "token": "BOT TOKEN",
+    "prefix": "!",
+    "ownerID": "OWNER ID",
+    "dburl": "MONGO DB URL",
+    "adminRole": "ADMIN ROLE ID"
+}

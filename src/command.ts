@@ -21,16 +21,23 @@ export class Command {
         this.msg = context.content.split(config.prefix)[1].split(this.cmd)[1].trim();
         switch(this.cmd) {
             case 'testing':
-                new TestCommand(this.msg, this.cmd, context);
+                new TestCommand(this.cmd, this.msg, context);
                 break
             case 'admin': 
-                new AdminCommand(this.msg, this.cmd, context);
+                new AdminCommand(this.cmd, this.msg, context);
                 break
-            case 'log':
-                console.log('Logging');
+            case 'roles':
+                //console.log('cmd: ' + this.cmd + ' msg: ' + this.msg)
+                var roles: string = '';
+                context.guild.roles.forEach(r => {
+                    roles += r.name + ' | ' + r.id + "\n"
+                    //roles += `**${r.name}** | ${r.id}\n`
+                })
+                var output: string = "```" + roles + "```"
+                context.channel.send(output)
                 break
             case 'fs':
-                new FilesCommand(this.msg, this.cmd, context, this.author);
+                new FilesCommand(this.cmd, this.msg, context, this.author);
                 break
             default: 
                 console.log('Default switch');

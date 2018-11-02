@@ -1,18 +1,21 @@
 import { Message, User } from "discord.js";
 import * as data from './../../config.json';
+import { Registry } from './registry';
 const config = (<any>data);
 
 export class AdminCommand {
     private author: User;
     private command: string;
-    constructor(msg: string, cmd: string, context: Message) {
+    constructor(cmd: string, msg: string, context: Message) {
         this.author = context.author;
         this.command = msg.split(' ')[0];
+        console.log('cmd: ' + cmd + " msg: " + msg)
         if (this.command) {
             switch (this.command) {
                 case 'add': this.addDoctor(context, msg, this.author); break
                 case 'remove': this.removeDoctor(context, msg); break
                 case 'purge': this.purgeChannel(context, msg); break
+                case 'register': new Registry(context, msg); break
                 default: context.channel.send('No admin param found.');
             }
         } else {
@@ -39,7 +42,7 @@ export class AdminCommand {
         let guildMember = message.member;
         let target = message.mentions.members.first();
         if (target) {
-            if (guildMember.roles.some(r => r.id == '456920159441911808')) {
+            if (guildMember.roles.some(r => r.id == '460452397538476032')) {
                 if (target.roles.some((r => r.id == '460452397538476032'))) {
                     return message.channel.send('User is already a code doctor.');
                 } else {

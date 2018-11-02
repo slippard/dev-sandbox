@@ -3,6 +3,7 @@ import { Command } from "./command";
 import User, { IUser } from './schemas/user';
 import { Member } from './models/GuildMember';
 import * as data from './config.json';
+import { type } from "os";
 
 const config = (<any>data);
 
@@ -28,15 +29,23 @@ export class Bot {
     }
 
     public async ready() {
+        var devs = this.client.guilds.get('456775919990865920').members;
+        /* devs.forEach(user => {
+            user.roles.some('')
+        }); */
         this.client.user.setPresence({
-            afk: true,
-            status: "dnd"
+            status: "dnd",
+            game: {
+                name: 'Playing',
+                type: "PLAYING",
+            }
         })
-        return this.client.user.setStatus('online');
+        
+        //this.client.user.setStatus("dnd");
     }
 
     public async handleMessage(message: Message) {
-        new Member(message.author.username, message.author.id);
+        new Member(message.author.username, message.author.id, message, this.client);
         new Command(message);
     }
 }

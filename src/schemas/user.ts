@@ -5,16 +5,14 @@ export interface IUser extends mongoose.Document {
     userid?: string;
     messageCount: number;
     bots?: Array<Number>;
-    files: Array<string>;
     doctor: boolean;
   };
   
   export const UserSchema = new mongoose.Schema({
     username: {type:String, required: true},
-    userid: String,
-    messageCount: Number,
+    userid: {type:String, required: true},
+    messageCount: {type: Number, required: true},
     bots: {type: Array, required: false},
-    files: {type: Array, required: false},
     doctor: {type: Boolean, required: true},
   });
   
