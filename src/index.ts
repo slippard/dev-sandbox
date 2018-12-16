@@ -4,13 +4,13 @@ import * as mongoose from 'mongoose';
 import * as data from './config.json';
 
 const config = (<any>data);
-const bot = new Client();
 export const db = mongoose.connection;
 
 mongoose.connect(config.dburl, { useNewUrlParser: true });
 
+
 new Bot(config.token).login().then(() => console.log('Sandbox online')).catch(err => {
-     console.log('Login failed: ' + err); 
+    console.log('Login failed: ' + err);
 });
 
 db.on('error', function (err: any) {

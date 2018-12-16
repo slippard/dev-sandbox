@@ -13,7 +13,7 @@ export class Registry {
         //console.log('Message Content: ' + msgcontent + "\ncmd: " + this.cmd);
         switch (cmd) {
             case 'repo':
-                try {
+                try { 
                     if (url.includes('.git')) this.newRepo(context, url);
                 } catch (e) {
                     context.channel.send('Something went wrong.');

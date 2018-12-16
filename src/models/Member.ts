@@ -23,7 +23,7 @@ export class Member {
                 user.userid = userid;
                 user.messageCount = 0;
                 user.bots = [];
-                user.doctor = false;
+                user.doctor = false; 
                 user.repositories = [];
                 user.save(function (err) {
                     if (err) return console.log(err);

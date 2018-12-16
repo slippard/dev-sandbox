@@ -28,6 +28,25 @@ export class CodeDoctor {
                     message.channel.send('Could not find user.');
                 }
             });
+        } else {
+            try {
+                var user = message.content.split(config.prefix)[1].slice(6);
+                DUser.findOne({userid: user}, function(err, doc) {
+                    if (err) return console.log(err);
+                    if(doc) {
+                        let repos: string = '';
+                        doc.repositories.forEach(r => {
+                            repos += `- ${r}\n`
+                        })
+                        let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories:\n${repos}` + "```";
+                        message.channel.send(profile);
+                    } else {
+                        message.channel.send('Could not find user.');
+                    }
+                });
+            } catch (error) {
+                return message.channel.send('Something went wrong.');
+            }
         }
     }
 
