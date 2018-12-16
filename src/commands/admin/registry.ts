@@ -8,7 +8,6 @@ export class Registry {
     constructor(context: Message, msg: string) {
         let cmd = msg.split(' ')[0];
         let url = msg.split(' ')[1];
-        console.log('url: ' + url)
         // !register repo git@git.com
         //console.log('Message Content: ' + msgcontent + "\ncmd: " + this.cmd);
         switch (cmd) {

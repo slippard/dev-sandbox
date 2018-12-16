@@ -8,7 +8,6 @@ export const db = mongoose.connection;
 
 mongoose.connect(config.dburl, { useNewUrlParser: true });
 
-
 new Bot(config.token).login().then(() => console.log('Sandbox online')).catch(err => {
     console.log('Login failed: ' + err);
 });

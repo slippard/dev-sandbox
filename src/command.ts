@@ -23,7 +23,7 @@ export class Command {
         this.msg = context.content.split(config.prefix)[1].split(this.cmd)[1].trim();
         // console.log('cmd: ' + this.cmd + ' msg: ' + this.msg);
         switch (this.cmd) {
-            case 'testing':
+            case 'test':
                 new TestCommand(this.cmd, this.msg, context);
                 break
             case 'roles':
