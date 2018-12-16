@@ -14,7 +14,7 @@ export class Registry {
         switch (cmd) {
             case 'repo':
                 try {
-                    if (url.includes('@') && url.includes('.git')) this.newRepo(context, url);
+                    if (url.includes('.git')) this.newRepo(context, url);
                 } catch (e) {
                     context.channel.send('Something went wrong.');
                 }

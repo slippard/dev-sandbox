@@ -51,13 +51,28 @@ export class Command {
             case 'whois':
                 new CodeDoctor().whois(this.context);
                 break
-            case 'register': 
+            case 'register':
                 new Registry(this.context, this.msg);
+                break;
+            case 'catagories':
+                this.catagories(this.context);
                 break;
             default:
                 console.log('Default switch');
                 break
         }
+    }
+
+    private catagories(message: Message) {
+        let guild = message.guild;
+        let channels: string = ' ';
+        guild.channels.forEach(c => {
+            if(c.type == 'category') { 
+                channels += `- ${c.name} | ${c.id}\n`;
+            }
+        });
+        var output: string = "```\nServer Catagories: \n" + channels + "\n```";
+        message.channel.send(output);
     }
 
     private pad(msg: Message) {
