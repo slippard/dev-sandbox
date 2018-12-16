@@ -1,10 +1,12 @@
 # Dev Sandbox Discord Bot
 ### [Join the Discord](https://discord.gg/6eBTTDM)
 
-## Setting up bot
-1. `git clone https://github.com/slippard/dev-sandbox.git`
-2. `cd dev-sandbox`
-3. `npm install`
-4. Rename `config-example` > `config.json` and input credentials
-5. `npm start`
+### Build & run locally
 
+```sh
+$ git clone git@github.com:slippard/dev-sandbox.git
+$ cd dev-sandbox/
+$ npm install
+> Rename config-example.json => config.json and update it's contents.
+$ npm start
+```
