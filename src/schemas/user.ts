@@ -6,6 +6,7 @@ export interface IUser extends mongoose.Document {
     messageCount: number;
     bots?: Array<Number>;
     doctor: boolean;
+    repositories?: Array<String>;
   };
   
   export const UserSchema = new mongoose.Schema({
@@ -14,6 +15,7 @@ export interface IUser extends mongoose.Document {
     messageCount: {type: Number, required: true},
     bots: {type: Array, required: false},
     doctor: {type: Boolean, required: true},
+    repositories: {type: Array, required: false},
   });
   
   const DUser = mongoose.model<IUser>('User', UserSchema);

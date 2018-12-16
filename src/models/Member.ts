@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Message, Client, Channel } from 'discord.js';
+import { Message, Client, Channel, TextChannel } from 'discord.js';
 import * as data from './../config.json';
 import DUser, { IUser } from '../schemas/user';
 const config = (<any>data);
@@ -19,21 +19,16 @@ export class Member {
                 console.log('Error: ' + err);
             } else if (!doc) {
                 let user = new DUser();
-                var register: Channel;
-                register = bot.channels.get('507488506113687562')
                 user.username = username;
                 user.userid = userid;
                 user.messageCount = 0;
                 user.bots = [];
                 user.doctor = false;
+                user.repositories = [];
                 user.save(function (err) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        console.log(username + ' added to the database.');
-                    }
+                    if (err) return console.log(err);
+                    (bot.guilds.get('456775919990865920').channels.get('509789262020083712') as TextChannel).send(username + ' has been registered in the database.');
                 })
-                message.channel.send(`New user registered`);
             } else {
                 DUser.updateOne({ userid: userid }, { $inc: { messageCount: 1 } }).then(function () { return })
             }

@@ -4,7 +4,7 @@ export interface IFile extends mongoose.Document {
     filename: string;
     filesize: string;
     fileowner: string;
-    fileurl: String
+    fileurl: String 
     date: string;
     public: boolean;
   };

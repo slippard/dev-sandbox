@@ -33,7 +33,6 @@ export class FilesCommand {
             }
             if (docs) {
                 var docList: string = '';
-                
                 docs.forEach(file => {
                     console.log(file);
                     docList += `Filename: ${file.filename} | Size: ${file.filesize} | Uploaded: ${file.date} | Public: ${file.public}\n`
@@ -43,7 +42,6 @@ export class FilesCommand {
                     .setColor(40850)
                     .setDescription(docList)
                 message.channel.send(success);
-
             } else {
                 const failure = new RichEmbed()
                     .setTitle('No Files Found.')
