@@ -5,7 +5,6 @@ import { Member } from './models/Member';
 import DUser, { IUser } from './schemas/user';
 import { Purge } from './commands/general/purge';
 import { TestCommand } from './commands/general/test';
-import { AdminCommand } from './commands/admin/admin';
 import { Registry } from './commands/admin/registry';
 import { FilesCommand } from './commands/fs/files';
 import { CodeDoctor } from './commands/admin/doctor';
@@ -26,9 +25,6 @@ export class Command {
         switch (this.cmd) {
             case 'testing':
                 new TestCommand(this.cmd, this.msg, context);
-                break
-            case 'admin':
-                new AdminCommand(this.cmd, this.msg, context);
                 break
             case 'roles':
                 this.getRoles(context);

@@ -7,7 +7,6 @@ const config = (<any>data);
 export class CodeDoctor {
 
     constructor() {
-
     }
 
     public whois(message: Message) {
