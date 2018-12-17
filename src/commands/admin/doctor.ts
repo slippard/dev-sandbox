@@ -16,7 +16,7 @@ export class CodeDoctor {
             DUser.findOne({ userid: target.id }, function (err, doc) {
                 if (err) return console.log(err);
                 if (doc) {
-                    if (doc.repositories == undefined || doc.repositories.length >= 0) {
+                    if (doc.repositories == undefined || doc.repositories.length == 0) {
                         let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories: none` + "```";
                         return message.channel.send(profile);
                     } else {
@@ -37,7 +37,7 @@ export class CodeDoctor {
                 DUser.findOne({ userid: user }, function (err, doc) {
                     if (err) return console.log(err);
                     if (doc) {
-                        if (doc.repositories == undefined || doc.repositories.length >= 0) {
+                        if (doc.repositories == undefined || doc.repositories.length == 0) {
                             let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories: none` + "```";
                             return message.channel.send(profile);
                         } else {

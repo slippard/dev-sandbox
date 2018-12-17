@@ -22,11 +22,15 @@ export class Registry {
                 this.newDev(context, url);
                 break;
             case 'fs':
-                this.newDev(context);
+                this.fs();
                 break;
             default:
                 break;
         }
+    }
+
+    private fs() {
+        
     }
 
     private newDev(message: Message, userid: string) {
