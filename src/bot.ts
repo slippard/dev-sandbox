@@ -2,9 +2,14 @@ import { Client, Message, VoiceConnection, ClientUser, MessageReaction, Guild, T
 import { Command } from "./command";
 import User, { IUser } from './schemas/user';
 import { Member } from './models/Member';
+import * as net from 'net';
 import * as data from './config.json';
 
 const config = (<any>data);
+
+interface IConnection {
+    userid: number;
+}
 
 export class Bot {
     public client: Client;
@@ -46,6 +51,46 @@ export class Bot {
                 type: "PLAYING",
             }
         })
+
+        /* tcp */
+        var tcpServer = net.createServer({ allowHalfOpen: true });
+
+        tcpServer.on('connection', function (socket) {
+
+            tcpServer.getConnections(function (error, count) {
+              console.log('Concurrent tcp connections= ' + count);
+            });
+          
+            socket.on('end', function () {
+                // console.log('connection ended ');
+            });
+          
+            socket.on('close', function () {
+              // console.log('client closed connection');
+            });
+          
+            socket.on('data', function (data: string) {
+                if(data.toString().split(' ')[0] == 'login') {
+                    console.log('User attempting login: ' + data.toString().split(' ')[1]);
+                    return socket.destroy();
+                } else {
+                    var flushed = socket.write('RESPONSE: Got userid');
+                    console.log('Message sent: ' + flushed);
+                    socket.destroy();
+                }
+              
+            });
+          
+            socket.on('error', function (error) {
+              console.log(error);
+              socket.destroy();
+            });
+          
+          });
+          
+          tcpServer.on('close', function () { console.log('Server closed'); });
+          
+          tcpServer.listen(1337);
     }
 
     private async handleMessage(message: Message) {
