@@ -8,6 +8,7 @@ export interface IUser extends mongoose.Document {
     doctor: boolean;
     dev: boolean;
     repositories?: Array<String>;
+    vericode?: number;
   };
   
   export const UserSchema = new mongoose.Schema({
@@ -18,6 +19,7 @@ export interface IUser extends mongoose.Document {
     doctor: {type: Boolean, required: true},
     dev: {type: Boolean, required: true},
     repositories: {type: Array, required: false},
+    vericode: {type: Number, required: false}
   });
   
   const DUser = mongoose.model<IUser>('User', UserSchema);

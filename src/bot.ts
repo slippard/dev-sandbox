@@ -4,12 +4,9 @@ import User, { IUser } from './schemas/user';
 import { Member } from './models/Member';
 import * as net from 'net';
 import * as data from './config.json';
+import DUser from "./schemas/user";
 
 const config = (<any>data);
-
-interface IConnection {
-    userid: number;
-}
 
 export class Bot {
     public client: Client;
@@ -56,29 +53,27 @@ export class Bot {
         var tcpServer = net.createServer({ allowHalfOpen: true });
 
         tcpServer.on('connection', function (socket) {
-
-            tcpServer.getConnections(function (error, count) {
-              console.log('Concurrent tcp connections= ' + count);
-            });
-          
-            socket.on('end', function () {
-                // console.log('connection ended ');
-            });
-          
-            socket.on('close', function () {
-              // console.log('client closed connection');
-            });
           
             socket.on('data', function (data: string) {
                 if(data.toString().split(' ')[0] == 'login') {
                     console.log('User attempting login: ' + data.toString().split(' ')[1]);
-                    return socket.destroy();
+                    socket.write('true');
+                    var user = data.toString().split(' ')[1];
+
+                    const number = user;
+                    const last4Digits = number.slice(-4);
+
+                    DUser.findOne({userid: user}, function(err, doc) {
+                        if(err)console.log(err);
+                        if(doc && doc.doctor == true){
+                            DUser.updateOne({userid: user}, {$set: {vericode: last4Digits}}).then(() => console.log('Vericode set for ' + doc.username));
+                        }
+                    })
+
                 } else {
-                    var flushed = socket.write('RESPONSE: Got userid');
-                    console.log('Message sent: ' + flushed);
                     socket.destroy();
                 }
-              
+              socket.destroy();
             });
           
             socket.on('error', function (error) {
@@ -88,7 +83,7 @@ export class Bot {
           
           });
           
-          tcpServer.on('close', function () { console.log('Server closed'); });
+          tcpServer.on('close', function () { console.log('Server closed connection'); });
           
           tcpServer.listen(1337);
     }
@@ -97,3 +92,7 @@ export class Bot {
         new Command(message, this.client);
     }
 }
+
+
+
+
