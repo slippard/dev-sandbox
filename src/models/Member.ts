@@ -24,6 +24,7 @@ export class Member {
                 user.messageCount = 0;
                 user.bots = [];
                 user.doctor = false; 
+                user.dev = false;
                 user.repositories = [];
                 user.save(function (err) {
                     if (err) return console.log(err);

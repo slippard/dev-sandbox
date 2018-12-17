@@ -23,7 +23,7 @@ export class Command {
         this.msg = context.content.split(config.prefix)[1].split(this.cmd)[1].trim();
         // console.log('cmd: ' + this.cmd + ' msg: ' + this.msg);
         switch (this.cmd) {
-            case 'test':
+            case 'ls':
                 new TestCommand(this.cmd, this.msg, context);
                 break
             case 'roles':
@@ -53,10 +53,20 @@ export class Command {
             case 'catagories':
                 this.catagories(this.context);
                 break;
+            case 'update':
+                this.update(this.context, client);
+                break;
             default:
                 console.log('Default switch');
                 break
         }
+    }
+
+    private update(message: Message, client: Client) {
+        let user: User;
+        message.guild.members.forEach(m => {
+            new Member(m.user.username, m.user.id, message, client);
+        })
     }
 
     private catagories(message: Message) {

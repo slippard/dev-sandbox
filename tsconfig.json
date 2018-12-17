@@ -10,7 +10,7 @@
             "dom"
         ],
         "experimentalDecorators": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "moduleResolution": "node",
         "allowJs": false,
         "sourceMap": true,

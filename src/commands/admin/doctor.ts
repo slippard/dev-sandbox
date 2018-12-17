@@ -13,16 +13,20 @@ export class CodeDoctor {
         let guildMember = message.member;
         let target = message.mentions.members.first();
         if (target) {
-            DUser.findOne({userid: target.id}, function(err, doc) {
+            DUser.findOne({ userid: target.id }, function (err, doc) {
                 if (err) return console.log(err);
-                if(doc) {
-                    
-                    let repos: string = '';
-                    doc.repositories.forEach(r => {
-                        repos += `- ${r}\n`
-                    })
-                    let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories:\n${repos}` + "```";
-                    message.channel.send(profile);
+                if (doc) {
+                    if (doc.repositories == undefined || doc.repositories.length >= 0) {
+                        let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories: none` + "```";
+                        return message.channel.send(profile);
+                    } else {
+                        var repos: string = '';
+                        doc.repositories.forEach(r => {
+                            repos += `- ${r}\n`
+                        })
+                        let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories:\n${repos}` + "```";
+                        return message.channel.send(profile);
+                    }
                 } else {
                     message.channel.send('Could not find user.');
                 }
@@ -30,15 +34,20 @@ export class CodeDoctor {
         } else {
             try {
                 var user = message.content.split(config.prefix)[1].slice(6);
-                DUser.findOne({userid: user}, function(err, doc) {
+                DUser.findOne({ userid: user }, function (err, doc) {
                     if (err) return console.log(err);
-                    if(doc) {
-                        let repos: string = '';
-                        doc.repositories.forEach(r => {
-                            repos += `- ${r}\n`
-                        })
-                        let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories:\n${repos}` + "```";
-                        message.channel.send(profile);
+                    if (doc) {
+                        if (doc.repositories == undefined || doc.repositories.length >= 0) {
+                            let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories: none` + "```";
+                            return message.channel.send(profile);
+                        } else {
+                            var repos: string = '';
+                            doc.repositories.forEach(r => {
+                                repos += `- ${r}\n`
+                            })
+                            let profile = "```\n" + `Username: ${doc.username}\nUserid: ${doc.userid}\nMessage Count: ${doc.messageCount}\nCode Doctor: ${doc.doctor}\nRepositories:\n${repos}` + "```";
+                            return message.channel.send(profile);
+                        }
                     } else {
                         message.channel.send('Could not find user.');
                     }

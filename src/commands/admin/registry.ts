@@ -12,16 +12,36 @@ export class Registry {
         //console.log('Message Content: ' + msgcontent + "\ncmd: " + this.cmd);
         switch (cmd) {
             case 'repo':
-                try { 
+                try {
                     if (url.includes('.git')) this.newRepo(context, url);
                 } catch (e) {
                     context.channel.send('Something went wrong.');
                 }
                 break;
+            case 'dev':
+                this.newDev(context, url);
+                break;
+            case 'fs':
+                this.newDev(context);
+                break;
             default:
                 break;
         }
+    }
 
+    private newDev(message: Message, userid: string) {
+        DUser.findOne({ userid: userid }, function (err, doc) {
+            if (err) console.log(err);
+            if (doc) {
+                if (doc.dev == false) {
+                    DUser.updateOne({ userid: userid }, { $set: { dev: true } }).then(function () { return message.channel.send("Registering new dev: `" + userid + "`") });
+                } else {
+                    message.channel.send('User is already a dev.');
+                }
+            } else {
+                message.channel.send('No user found.');
+            }
+        })
     }
 
     private newRepo(message: Message, repo: string) {
@@ -29,7 +49,7 @@ export class Registry {
             if (err) console.log('Error: ' + err);
             if (doc) {
                 var str = repo;
-                DUser.updateOne({ userid: message.author.id }, { $push: { repositories: str } }).then(function () { return message.channel.send("Registered new repository: `" + str + "`")})
+                DUser.updateOne({ userid: message.author.id }, { $push: { repositories: str } }).then(function () { return message.channel.send("Registered new repository: `" + str + "`") })
                 // DUser.updateOne({ userid: message.author.id}, {$push: {}})
             }
         })
