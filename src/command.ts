@@ -100,25 +100,27 @@ export class Command {
     }
 
     private pad(msg: Message) {
-        if (!String.prototype.padStart) {
-            String.prototype.padStart = function padStart(targetLength, padString) {
-                targetLength = targetLength >> 0;
-                padString = String(typeof padString !== 'undefined' ? padString : ' ');
-                if (this.length >= targetLength) {
-                    return String(this);
-                } else {
-                    targetLength = targetLength - this.length;
-                    if (targetLength > padString.length) {
-                        padString += padString.repeat(targetLength / padString.length);
+        msg.delete().then(() => {
+            if (!String.prototype.padStart) {
+                String.prototype.padStart = function padStart(targetLength, padString) {
+                    targetLength = targetLength >> 0;
+                    padString = String(typeof padString !== 'undefined' ? padString : ' ');
+                    if (this.length >= targetLength) {
+                        return String(this);
+                    } else {
+                        targetLength = targetLength - this.length;
+                        if (targetLength > padString.length) {
+                            padString += padString.repeat(targetLength / padString.length);
+                        }
+                        return padString.slice(0, targetLength) + String(this);
                     }
-                    return padString.slice(0, targetLength) + String(this);
-                }
-            };
-        }
-        const number = msg.content;
-        const last4Digits = number.slice(-4);
-        const maskedNumber = last4Digits.padStart(number.length, '*');
-        msg.channel.send("```\n" + maskedNumber + "\n```");
+                };
+            }
+            const number = msg.content;
+            const last4Digits = number.slice(-6);
+            const maskedNumber = last4Digits.padStart(number.length, '*');
+            msg.channel.send("```\n" + maskedNumber + "\n```");
+        })
     }
 
     private getRoles(context: Message) {
