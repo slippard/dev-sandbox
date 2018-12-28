@@ -8,6 +8,7 @@ import { TestCommand } from './commands/general/test';
 import { Registry } from './commands/admin/registry';
 import { FilesCommand } from './commands/fs/files';
 import { CodeDoctor } from './commands/admin/doctor';
+import { HelpCommand } from './commands/general/help';
 
 const config = (<any>data);
 
@@ -32,6 +33,9 @@ export class Command {
             case 'fs':
                 new FilesCommand(this.cmd, this.msg, context, this.author);
                 break
+            case 'help':
+                new HelpCommand().sendHelp(context);
+                break
             case 'purge':
                 new Purge(this.context);
                 break
@@ -39,6 +43,20 @@ export class Command {
                 this.pad(this.context);
                 break
             case 'promote':
+                /* var cmd = this.msg.split(' ')[0];
+                switch (cmd) {
+                    case 'promote':
+                        new CodeDoctor().promoteDoctor(this.context);
+                        break;
+                    case 'demote':
+                        new CodeDoctor().demoteDoctor(this.context);
+                        break;
+                    case 'whois':
+                        new CodeDoctor().whois(this.context);
+                        break;
+                    default:
+                        break;
+                } */
                 new CodeDoctor().promoteDoctor(this.context);
                 break
             case 'demote':
@@ -73,7 +91,7 @@ export class Command {
         let guild = message.guild;
         let channels: string = ' ';
         guild.channels.forEach(c => {
-            if(c.type == 'category') { 
+            if (c.type == 'category') {
                 channels += `- ${c.name} | ${c.id}\n`;
             }
         });

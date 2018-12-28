@@ -34,6 +34,8 @@ export class CodeDoctor {
         } else {
             try {
                 var user = message.content.split(config.prefix)[1].slice(6);
+                // var user = message.content.split(config.prefix)[1].split(' ')[2];
+                //console.log(user);
                 DUser.findOne({ userid: user }, function (err, doc) {
                     if (err) return console.log(err);
                     if (doc) {
@@ -68,7 +70,7 @@ export class CodeDoctor {
                     if (target) {
                         if (guildMember.roles.some(r => r.id == '460452397538476032')) {
                             if (target.roles.some((r => r.id == '460452397538476032'))) {
-                                return target.removeRole('460452397538476032').then(() => { DUser.updateOne({ userid: message.author.id }, { $set: { doctor: true } }).then(function () { return message.channel.send('Demoting: ' + target.user.username) }) });
+                                return target.removeRole('460452397538476032').then(() => { DUser.updateOne({ userid: target.user.id }, { $set: { doctor: false } }).then(function () { return message.channel.send('Demoting: ' + target.user.username) }) });
                             } else {
                                 return message.channel.send('User is not a code doctor.');
                             }

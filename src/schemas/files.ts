@@ -18,5 +18,5 @@ export interface IFile extends mongoose.Document {
     public: {type: Boolean, required: true},
   });
   
-  const Files = mongoose.model<IFile>('File', FileSchema);
-  export default Files;
+  const File = mongoose.model<IFile>('File', FileSchema);
+  export default File;

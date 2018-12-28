@@ -1,7 +1,9 @@
 {
-    "token": "BOT TOKEN",
+    "token": "*************",
     "prefix": "!",
-    "ownerID": "OWNER ID",
-    "dburl": "MONGO DB URL",
-    "adminRole": "ADMIN ROLE ID"
+    "ownerID": "123456789",
+    "dburl": "*************",
+    "adminRole": "123456789",
+    "accessKeyId": "*************",
+    "secretAccessKey": "*************"
 }

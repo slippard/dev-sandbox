@@ -2,21 +2,32 @@ import { Message, User, RichEmbed } from "discord.js";
 import * as data from './../../config.json';
 import * as moment from 'moment';
 import * as fs from 'fs';
-import * as https from 'https';
-import Files, { IFile } from '../../schemas/files';
+import File, { IFile } from '../../schemas/files';
 import DUser, { IUser } from '../../schemas/user';
+import * as path from 'path';
+import * as aws from 'aws-sdk';
+
 const config = (<any>data);
+
+interface AWSFILE {
+    key: String,
+    LastModified: Date,
+    ETag: String,
+    StorageClass: String
+}
 
 export class FilesCommand {
     private command: string;
     constructor(cmd: string, msg: string, context: Message, author: User) {
+
         let guildMember = context.member;
         if (!guildMember.roles.some(r => r.name === config.adminRole)) { context.channel.send('You do not have permission to use FS commands.'); return }
         let obj = context.attachments.first();
         this.command = msg.split(' ')[0];
         if (this.command) {
             switch (this.command) {
-                case 'save': this.writeFile(context, msg, context.author, obj); break
+                case 'register': this.register(context, msg);
+                case 'listall': this.showAll(context); break
                 case 'ls': this.listFile(context, msg, context.author, obj); break
                 case 'load': this.readFile(context, msg, context.author, obj); break
                 default: context.channel.send('No fs param found.');
@@ -26,8 +37,39 @@ export class FilesCommand {
         }
     }
 
+    private async showAll(context: Message) {
+        try {
+            aws.config.update({
+                accessKeyId: config.accessKeyId,
+                secretAccessKey: config.secretAccessKey,
+                region: 'us-east-1',
+            })
+            const s3 = new aws.S3();
+            const res = await s3.listObjectsV2({
+                Bucket: 'devsandbox-userfiles'
+            }).promise();
+            var output: string = '';
+            res.Contents.forEach(file => {
+                console.log(file);
+                output += `- Filename: ${file.Key} | Size: ${file.Size}B \n`;
+            })
+            context.channel.send("```css\n" + output + "```");
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+
+    private async register(message: Message, msg: string) {
+        DUser.findOne({ userid: message.author.id }, function (err, user) {
+            if (err) return console.log(err);
+            if (user) {
+                console.log('User found');
+            } else console.log('User not found.');
+        })
+    }
+
     private listFile(message: Message, msg: string, author: User, obj: any) {
-        Files.find({ fileowner: author.id }, function (err, docs) {
+        File.find({ fileowner: author.id }, function (err, docs) {
             if (err) {
                 console.log('Error: ' + err);
             }
@@ -68,24 +110,24 @@ export class FilesCommand {
     private async readFile(message: Message, msg: string, author: User, obj: any) {
         var findFile = msg.split(' ')[1];
         console.log('Find: ' + findFile);
-        Files.findOne({filename: findFile}, function(e, doc) {
-            if(e)throw e;
-            if(doc) {
-                if(doc.fileowner == message.author.id) {
+        File.findOne({ filename: findFile }, function (e, doc) {
+            if (e) throw e;
+            if (doc) {
+                if (doc.fileowner == message.author.id) {
                     let ext = findFile.split('.')[1];
                     switch (ext) {
                         case 'ts':
-                            fs.readFile(findFile, "utf8", function(err, data) {
-                                if(err) throw err;
+                            fs.readFile(findFile, "utf8", function (err, data) {
+                                if (err) throw err;
                                 message.channel.send("```typescript\n" + data + "```")
                             });
-                        break;
+                            break;
                         case 'js':
-                            fs.readFile(findFile, "utf8", function(err, data) {
-                                if(err) throw err;
+                            fs.readFile(findFile, "utf8", function (err, data) {
+                                if (err) throw err;
                                 message.channel.send("```javascript\n" + data + "```")
                             });
-                        break;
+                            break;
                         default:
                             break;
                     }
@@ -99,28 +141,28 @@ export class FilesCommand {
     }
 
     private async loadFile(findFile: string, message: Message) {
-        let file = await fs.readFile('./files/' + findFile, function(err, contents) {
-            if(err) return message.channel.send('Error');
+        let file = await fs.readFile('./files/' + findFile, function (err, contents) {
+            if (err) return message.channel.send('Error');
         });
         message.channel.send(file);
     }
 
-    private writeFile(message: Message, msg: string, author: User, obj: any) {
+    /* private writeFile(message: Message, msg: string, author: User, obj: any) {
         message.delete()
         if (!obj) {
             message.channel.send('No file attached');
         } else {
             console.log('File: ' + obj.filename + ' | Size: ' + obj.filesize + ' | Url: ' + obj.url)
             try {
-                var file = fs.createWriteStream('./files/' + obj.filename);
+                var file = fs.createWriteStream('../files/' + obj.filename);
                 var request = https.get(obj.url, function (response) {
                     response.pipe(file);
                 });
-                Files.findOne({ filename: obj.filename }, function (err, doc) {
+                File.findOne({ filename: obj.filename }, function (err, doc) {
                     if (err) {
                         console.log('Error: ' + err);
                     } else if (!doc) {
-                        let file = new Files();
+                        let file = new File();
                         file.filename = obj.filename;
                         file.filesize = obj.filesize;
                         file.fileowner = message.author.id;
@@ -149,6 +191,6 @@ export class FilesCommand {
             }
 
         }
-    }
+    } */
 
 }
