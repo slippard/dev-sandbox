@@ -6,6 +6,7 @@ import File, { IFile } from '../../schemas/files';
 import DUser, { IUser } from '../../schemas/user';
 import * as path from 'path';
 import * as aws from 'aws-sdk';
+import * as https from 'https';
 
 const config = (<any>data);
 
@@ -30,6 +31,7 @@ export class FilesCommand {
                 case 'listall': this.showAll(context); break
                 case 'ls': this.listFile(context, msg, context.author, obj); break
                 case 'load': this.readFile(context, msg, context.author, obj); break
+                case 'save': this.writeFile(context, msg, context.author, obj); break
                 default: context.channel.send('No fs param found.');
             }
         } else {
@@ -76,18 +78,12 @@ export class FilesCommand {
             if (docs) {
                 var docList: string = '';
                 docs.forEach(file => {
-                    console.log(file);
                     docList += `Filename: ${file.filename} | Size: ${file.filesize} | Uploaded: ${file.date} | Public: ${file.public}\n`
                 })
-                const success = new RichEmbed()
-                    .setTitle('Your files: ')
-                    .setColor(40850)
-                    .setDescription(docList)
+                const success = new RichEmbed().setTitle('Your files: ').setColor(40850).setDescription(docList)
                 message.channel.send(success);
             } else {
-                const failure = new RichEmbed()
-                    .setTitle('No Files Found.')
-                    .setColor(16711680)
+                const failure = new RichEmbed().setTitle('No Files Found.').setColor(16711680)
                 message.channel.send(failure);
             }
         })
@@ -147,7 +143,7 @@ export class FilesCommand {
         message.channel.send(file);
     }
 
-    /* private writeFile(message: Message, msg: string, author: User, obj: any) {
+    private writeFile(message: Message, msg: string, author: User, obj: any) {
         message.delete()
         if (!obj) {
             message.channel.send('No file attached');
@@ -191,6 +187,6 @@ export class FilesCommand {
             }
 
         }
-    } */
+    }
 
 }

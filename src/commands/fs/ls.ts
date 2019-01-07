@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { userInfo } from "os";
 
-export class TestCommand {
+export class LsCommand {
     private author: string;
     private keyword: string;
     private param: string;
@@ -12,13 +12,27 @@ export class TestCommand {
         //context.channel.send('Author: ' + this.author + ' said: ' + msg)
         if (this.keyword) {
             switch (this.keyword) {
-                case 'role': this.getRoles(context, msg, this.param); break
+                case 'role': this.getRoleMembers(context, msg, this.param); break
+                case 'roles': this.listRoles(context); break
                 case 'members': this.getMembers(context, msg, this.param); break
+                case 'cat': this.getCatagories(context); break
                 default: console.log('default');
             }
         } else {
             context.channel.send('No keyword');
         }
+    }
+
+    private getCatagories(message: Message) {
+        let guild = message.guild;
+        let channels: string = ' ';
+        guild.channels.forEach(c => {
+            if (c.type == 'category') {
+                channels += `- ${c.name} | ${c.id}\n`;
+            }
+        });
+        var output: string = "```\nServer Catagories: \n" + channels + "\n```";
+        message.channel.send(output);
     }
 
     private getMembers(message: Message, msg: string, param: string) {
@@ -48,7 +62,7 @@ export class TestCommand {
         message.channel.send(output)
     }
 
-    private getRoles(message: Message, msg: string, param: string) {
+    private getRoleMembers(message: Message, msg: string, param: string) {
         if (param) {
             let role = message.guild.roles.get(param);
             let userlist: string = '';
@@ -61,4 +75,14 @@ export class TestCommand {
             return message.channel.send("Provide a role ID to search. Use `!roles` to get role IDs.");
         }
     }
+
+    private listRoles(message: Message) {
+        const guild = message.guild;
+        var roles: string = ''; 
+        guild.roles.forEach(r => {
+            roles += `${r.name} | ${r.id}\n`;
+        })
+        message.channel.send("```\n" + roles + "```");
+    }
+
 }

@@ -24,3 +24,4 @@ export interface IUser extends mongoose.Document {
   
   const DUser = mongoose.model<IUser>('User', UserSchema);
   export default DUser;
+

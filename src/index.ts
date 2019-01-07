@@ -1,5 +1,5 @@
 import { Client } from 'discord.js';
-import { Bot } from "./bot";
+import { Bot } from "./bot"; 
 import * as mongoose from 'mongoose';
 import * as data from './config.json';
 
