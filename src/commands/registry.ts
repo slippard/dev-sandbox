@@ -1,36 +1,26 @@
 import { Message, User, Channel, CategoryChannel, Guild, GuildChannel } from "discord.js";
 import * as mongoose from 'mongoose';
-import DUser, { IUser } from '../../schemas/user';
-import * as data from './../../config.json';
-const config = (<any>data);
+import DUser, { IUser } from '../schemas/user';
+import { config } from '../config';
 
 export class Registry {
     constructor(context: Message, msg: string) {
         let cmd = msg.split(' ')[0];
         let url = msg.split(' ')[1];
-        // !register repo git@git.com
         //console.log('Message Content: ' + msgcontent + "\ncmd: " + this.cmd);
         switch (cmd) {
-            case 'repo':
-                try {
-                    if (url.includes('.git')) this.newRepo(context, url);
-                } catch (e) {
-                    context.channel.send('Something went wrong.');
-                }
-                break;
-            case 'dev':
-                this.newDev(context, url);
-                break;
-            case 'fs':
-                this.fs();
-                break;
-            default:
-                break;
+            case 'repo': this.checkRepo(context, url); break;
+            case 'dev': this.newDev(context, url); break;
+            default: break;
         }
     }
 
-    private fs() {
-        
+    private checkRepo(message: Message, url: string) {
+        try {
+            if (url.includes('.git')) this.newRepo(message, url);
+        } catch (e) {
+            message.channel.send('Please provide a valid git repo.');
+        }
     }
 
     private newDev(message: Message, userid: string) {

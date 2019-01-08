@@ -1,8 +1,7 @@
 import { Message } from "discord.js";
 import * as mongoose from 'mongoose';
-import * as data from '../../config.json';
-import DUser, { IUser } from '../../schemas/user';
-const config = (<any>data);
+import { config } from '../config';
+import DUser, { IUser } from '../schemas/user';
 
 export class CodeDoctor {
 

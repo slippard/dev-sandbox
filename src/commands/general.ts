@@ -1,14 +1,7 @@
 import { Message, RichEmbed, Emoji } from "discord.js";
 import * as mongoose from 'mongoose';
-import * as data from '../config.json';
+import { config } from '../config';
 import DUser, { IUser } from '../schemas/user';
-const config = (<any>data);
-
-export class GeneralCmd {
-    constructor(context: Message) { }
-
-
-}
 
 export class Help {
     constructor(context: Message) {
@@ -33,7 +26,6 @@ export class Random {
         const errEmoji: Emoji = context.guild.emojis.find('name', 'thonk')
         if(this.max)this.getMax(this.max); else context.react(errEmoji);
     }
-
     private getMax(max: number) {
         const ran = Math.floor(Math.random() * (max - 1 + 1) + 1);  
         this.context.channel.send(`${ran}`);
@@ -66,9 +58,9 @@ export class Pad {
     }
 }
 
+
 export class Purge {
     constructor(context: Message) {
-        // this.purge(context.author.id);
         DUser.findOne({ userid: context.author.id }, function (err, doc) {
             if (err) console.log('Error: ' + err);
             if (doc) {
@@ -93,14 +85,7 @@ export class Purge {
                     })
                 }
             }
-        })
+        })   
     }
-
-    /* private async purge(id: string) {
-        const isDoc: boolean = await isDoc(id);
-    } */
 }
 
-async function isDoc(id: string): Promise<number> {
-    return await DUser.countDocuments({userid: id}, (err: any, count: number) => { return count} )
-}

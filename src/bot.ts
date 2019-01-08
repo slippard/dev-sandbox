@@ -3,10 +3,8 @@ import { Command } from "./command";
 import User, { IUser } from './schemas/user';
 import { Member } from './models/Member';
 import * as net from 'net';
-import * as data from './config.json';
+import { config } from './config';
 import DUser from "./schemas/user";
-
-const config = (<any>data);
 
 export class Bot {
     public client: Client;

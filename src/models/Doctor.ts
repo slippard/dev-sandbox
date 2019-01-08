@@ -1,11 +1,11 @@
 import * as mongoose from 'mongoose';
-import { Message, Client, Channel, TextChannel } from 'discord.js';
+import { Message, Client, TextChannel } from 'discord.js';
 import { config } from './../config';
 import DUser, { IUser } from '../schemas/user';
 
 mongoose.connect(config.dburl, { useNewUrlParser: true });
 
-export class Member {
+export class Doctor {
     private username: string;
     private userid: string;
     private bot: Client;
@@ -27,7 +27,7 @@ export class Member {
                 user.repositories = [];
                 user.save(function (err) {
                     if (err) return console.log(err);
-                    (bot.guilds.get('456775919990865920').channels.get('509789262020083712') as TextChannel).send(username + ' has been registered in the database.');
+                    (bot.guilds.get(config.default_server).channels.get(config.modlog) as TextChannel).send(username + ' has been registered in the database.');
                 })
             } else {
                 DUser.updateOne({ userid: userid }, { $inc: { messageCount: 1 } }).then(function () { return })
@@ -36,7 +36,7 @@ export class Member {
     }
 
     public async isDoc(id: string) {
-        var data = await this.bot.users.get(id).fetchProfile();
+        var data = this.bot.users.get(id).fetchProfile();
         console.log(data);
     }
 

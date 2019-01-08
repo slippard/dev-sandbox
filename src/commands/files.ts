@@ -1,14 +1,12 @@
 import { Message, User, RichEmbed } from "discord.js";
-import * as data from './../../config.json';
+import { config } from '../config';
 import * as moment from 'moment';
 import * as fs from 'fs';
-import File, { IFile } from '../../schemas/files';
-import DUser, { IUser } from '../../schemas/user';
+import File, { IFile } from '../schemas/files';
+import DUser, { IUser } from '../schemas/user';
 import * as path from 'path';
 import * as aws from 'aws-sdk';
 import * as https from 'https';
-
-const config = (<any>data);
 
 interface AWSFILE {
     key: String,

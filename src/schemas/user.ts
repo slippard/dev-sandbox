@@ -21,7 +21,7 @@ export interface IUser extends mongoose.Document {
     repositories: {type: Array, required: false},
     vericode: {type: Number, required: false}
   });
-  
+   
   const DUser = mongoose.model<IUser>('User', UserSchema);
   export default DUser;
 

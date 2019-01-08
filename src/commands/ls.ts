@@ -9,14 +9,13 @@ export class LsCommand {
         this.author = context.author.id;
         this.keyword = msg.split(' ')[0];
         this.param = msg.split(' ')[1];
-        //context.channel.send('Author: ' + this.author + ' said: ' + msg)
+        //context.channel.send('Author: ' + this.author + ' said: ' + msg);
         if (this.keyword) {
             switch (this.keyword) {
                 case 'role': this.getRoleMembers(context, msg, this.param); break
                 case 'roles': this.listRoles(context); break
                 case 'members': this.getMembers(context, msg, this.param); break
                 case 'cat': this.getCatagories(context); break
-                default: console.log('default');
             }
         } else {
             context.channel.send('No keyword');
