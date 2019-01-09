@@ -12,7 +12,7 @@ export class LsCommand {
         //context.channel.send('Author: ' + this.author + ' said: ' + msg);
         if (this.keyword) {
             switch (this.keyword) {
-                case 'role': this.getRoleMembers(context, msg, this.param); break
+                case 'rolemembers': this.getRoleMembers(context, msg, this.param); break
                 case 'roles': this.listRoles(context); break
                 case 'members': this.getMembers(context, msg, this.param); break
                 case 'cat': this.getCatagories(context); break

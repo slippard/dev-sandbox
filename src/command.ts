@@ -19,7 +19,7 @@ export class Command {
         if (!context.content.startsWith(config.prefix)) return
         this.cmd = context.content.split(config.prefix)[1].split(' ')[0];
         this.msg = context.content.split(config.prefix)[1].split(this.cmd)[1].trim();
-        // console.log('cmd: ' + this.cmd + ' msg: ' + this.msg);
+        console.log('cmd: ' + this.cmd + ' msg: ' + this.msg);
         switch (this.cmd) {
             case 'ls': new LsCommand(this.cmd, this.msg, context); break
             // case 'fs': new FilesCommand(this.cmd, this.msg, context, this.author); break

@@ -5,6 +5,7 @@ export interface IUser extends mongoose.Document {
     userid?: string;
     messageCount: number;
     bots?: Array<Number>;
+    channels?: Boolean;
     doctor: boolean;
     dev: boolean;
     repositories?: Array<String>;
@@ -16,6 +17,7 @@ export interface IUser extends mongoose.Document {
     userid: {type:String, required: true},
     messageCount: {type: Number, required: true},
     bots: {type: Array, required: false},
+    channels: {type: Boolean, required: false},
     doctor: {type: Boolean, required: true},
     dev: {type: Boolean, required: true},
     repositories: {type: Array, required: false},

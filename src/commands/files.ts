@@ -18,10 +18,11 @@ interface AWSFILE {
 export class FilesCommand {
     private command: string;
     constructor(cmd: string, msg: string, context: Message, author: User) {
-
         let guildMember = context.member;
         if (!guildMember.roles.some(r => r.name === config.adminRole)) { context.channel.send('You do not have permission to use FS commands.'); return }
+        // grab attached file
         let obj = context.attachments.first();
+        // parse what to do with this file
         this.command = msg.split(' ')[0];
         if (this.command) {
             switch (this.command) {
