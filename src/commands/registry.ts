@@ -18,6 +18,13 @@ export class Registry {
 
     private async createChannel(message: Message, url: string){
         let target = url;
+<<<<<<< Updated upstream
+=======
+        const sandbox = message.guild.channels.get(message.channel.id);
+        await message.delete();
+        if(sandbox.parent.id != '533030441918136341') return message.channel.send('This command can only be used in the sandbox catagory. ' + `<@533030441918136341>`);
+        
+>>>>>>> Stashed changes
         DUser.findOne({userid: target}, async (err, doc) => {
             if(err) console.log(err);
             if(doc) {
