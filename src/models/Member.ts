@@ -22,7 +22,6 @@ export class Member {
                 user.userid = userid;
                 user.messageCount = 0; 
                 user.bots = [];
-                user.sandbox = false;
                 user.doctor = false; 
                 user.dev = false;
                 user.repositories = [];
