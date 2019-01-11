@@ -1,11 +1,14 @@
 import * as mongoose from 'mongoose';
+import { Bool } from 'aws-sdk/clients/clouddirectory';
 
 export interface IUser extends mongoose.Document {
     username: string;
     userid?: string;
     messageCount: number;
     bots?: Array<Number>;
-    channels?: Boolean;
+    sandbox?: Boolean;
+    fs?: Boolean;
+    files?: Array<object>;
     doctor: boolean;
     dev: boolean;
     repositories?: Array<String>;
@@ -17,7 +20,9 @@ export interface IUser extends mongoose.Document {
     userid: {type:String, required: true},
     messageCount: {type: Number, required: true},
     bots: {type: Array, required: false},
-    channels: {type: Boolean, required: false},
+    sandbox: {type: Boolean, required: false},
+    fs: {type: Boolean, required: false},
+    files: {type: Array, required: false},
     doctor: {type: Boolean, required: true},
     dev: {type: Boolean, required: true},
     repositories: {type: Array, required: false},

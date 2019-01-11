@@ -1,4 +1,4 @@
-import { Message, User, RichEmbed } from "discord.js";
+import { Message, User, RichEmbed, MessageAttachment } from "discord.js";
 import { config } from '../config';
 import * as moment from 'moment';
 import * as fs from 'fs';
@@ -8,11 +8,10 @@ import * as path from 'path';
 import * as aws from 'aws-sdk';
 import * as https from 'https';
 
-interface AWSFILE {
-    key: String,
-    LastModified: Date,
-    ETag: String,
-    StorageClass: String
+interface LocalFile {
+    name: String,
+    url: String,
+    uploaded: String,
 }
 
 export class FilesCommand {
@@ -20,22 +19,80 @@ export class FilesCommand {
     constructor(cmd: string, msg: string, context: Message, author: User) {
         let guildMember = context.member;
         if (!guildMember.roles.some(r => r.name === config.adminRole)) { context.channel.send('You do not have permission to use FS commands.'); return }
-        // grab attached file
-        let obj = context.attachments.first();
-        // parse what to do with this file
+        let zip = context.attachments.first();
         this.command = msg.split(' ')[0];
-        if (this.command) {
+        if(zip && this.command) {
             switch (this.command) {
-                case 'register': this.register(context, msg);
-                case 'listall': this.showAll(context); break
-                case 'ls': this.listFile(context, msg, context.author, obj); break
-                case 'load': this.readFile(context, msg, context.author, obj); break
-                case 'save': this.writeFile(context, msg, context.author, obj); break
-                default: context.channel.send('No fs param found.');
+                case 'save': this.saveFile(context, zip);
+                // case 'listall': this.showAll(context); break
+                // case 'ls': this.listFile(context, msg, context.author, obj); break
+                // case 'load': this.readFile(context, msg, context.author, obj); break
+                // case 'save': this.writeFile(context, msg, context.author, obj); break
+                default: break;
+            }
+        } else if (this.command){
+            switch (this.command) {
+                case 'list': this.listFiles(context);
+                default: break;
             }
         } else {
             context.channel.send('No command');
         }
+    }
+
+    private async saveFile(context: Message, zip: MessageAttachment) {
+        const newFile: LocalFile = {
+            name: zip.filename,
+            url: zip.proxyURL,
+            uploaded: moment().format('MMMM Do YYYY, h:mm:ss a')
+        }
+        DUser.findOne({userid: context.author.id}, async (err, doc) => {
+            if(err)return console.log(err);
+            if(doc && doc.fs == true) {
+                var files = [];
+                await doc.files.forEach(f => {
+                    files.push(f);
+                })
+                if(files.some(f => f.name === zip.filename)) {
+                    return context.channel.send(`File with the name ${zip.filename} already exists. Please rename file and try again.`);
+                }
+                DUser.updateOne({ userid: context.author.id }, { $push: { files: newFile } }).then(function () { 
+                    return context.channel.send(`${zip.filename} saved to your file list. Use ` + "`!fs list` to list your files."); 
+                });
+            } else {
+                console.log('something went wrong?');
+            }
+        })
+    }
+
+    private async listFiles(context: Message) {
+        DUser.findOne({userid: context.author.id}, async (err, doc) => {
+            if(err)return console.log(err);
+            if(doc && doc.fs == true) {
+                if(doc.files.length == 0 || doc.files == undefined || doc.files == null) {
+                    return context.channel.send('No files found.');
+                }
+                var files = [];
+                var output = '';
+                await doc.files.forEach(f => {
+                    files.push(f);
+                })
+                await files.forEach(f => {
+                    output += `-${f.name} uploaded ${f.uploaded}: ${f.url}\n\n`;
+                })
+                const lsembed = new RichEmbed({
+                    title: 'Your saved files:',
+                    description: output,
+                    author: {
+                        name: context.author.username,
+                        icon_url: context.author.avatarURL
+                    }
+                });
+                return context.channel.send(lsembed);
+            } else {
+                console.log('something went wrong?');
+            }// context.channel.send("Please register a filesystem before using fs commands. `!register fs`");
+        })
     }
 
     private async showAll(context: Message) {
@@ -58,15 +115,6 @@ export class FilesCommand {
         } catch (e) {
             console.log(e.message);
         }
-    }
-
-    private async register(message: Message, msg: string) {
-        DUser.findOne({ userid: message.author.id }, function (err, user) {
-            if (err) return console.log(err);
-            if (user) {
-                console.log('User found');
-            } else console.log('User not found.');
-        })
     }
 
     private listFile(message: Message, msg: string, author: User, obj: any) {

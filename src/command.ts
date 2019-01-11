@@ -22,7 +22,7 @@ export class Command {
         console.log('cmd: ' + this.cmd + ' msg: ' + this.msg);
         switch (this.cmd) {
             case 'ls': new LsCommand(this.cmd, this.msg, context); break
-            // case 'fs': new FilesCommand(this.cmd, this.msg, context, this.author); break
+            case 'fs': new FilesCommand(this.cmd, this.msg, context, this.author); break
             case 'help': new Help(context); break
             case 'ran': new Random(context); break
             case 'purge': new Purge(this.context); break
