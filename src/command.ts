@@ -15,6 +15,7 @@ export class Command {
     private msg: string;
     constructor(public context: Message, client: Client) {
         new Member(context.author.username, context.author.id, context, client);
+        this.update(this.context, client);
         this.author = context.author;
         if (!context.content.startsWith(config.prefix)) return
         this.cmd = context.content.split(config.prefix)[1].split(' ')[0];
@@ -31,7 +32,6 @@ export class Command {
             case 'demote': new CodeDoctor().demoteDoctor(this.context); break
             case 'whois': new CodeDoctor().whois(this.context); break
             case 'register': new Registry(this.context, this.msg); break;
-            case 'updatemembers': this.update(this.context, client); break;
             default: console.log('Default switch'); break
         }
     }
