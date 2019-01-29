@@ -2,8 +2,7 @@ import { Client } from 'discord.js';
 import { Bot } from "./bot"; 
 import * as mongoose from 'mongoose';
 import { config } from './config';
-
-export const db = mongoose.connection;
+import { db } from './mongo';
 
 mongoose.connect(config.dburl, { useNewUrlParser: true });
 
