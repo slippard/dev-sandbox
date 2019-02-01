@@ -7,5 +7,6 @@
 $ git clone git@github.com:slippard/dev-sandbox.git
 $ cd dev-sandbox/
 $ npm install
+$ create & populate 'config.ts'
 $ npm start
 ```
