@@ -95,7 +95,7 @@ export class FilesCommand {
         })
     }
 
-    private async showAll(context: Message) {
+    /* private async showAll(context: Message) {
         try {
             aws.config.update({
                 accessKeyId: config.accessKeyId,
@@ -115,7 +115,7 @@ export class FilesCommand {
         } catch (e) {
             console.log(e.message);
         }
-    }
+    } */
 
     private listFile(message: Message, msg: string, author: User, obj: any) {
         File.find({ fileowner: author.id }, function (err, docs) {

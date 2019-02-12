@@ -64,11 +64,10 @@ export class Purge {
         DUser.findOne({ userid: context.author.id }, function (err, doc) {
             if (err) console.log('Error: ' + err);
             if (doc) {
-                if(doc.doctor === true) {
-                    var amount = !!parseInt(context.content.split(' ')[1]) ? parseInt(context.content.split(' ')[1]) : parseInt(context.content.split(' ')[2])
+                var amount = !!parseInt(context.content.split(' ')[1]) ? parseInt(context.content.split(' ')[1]) : parseInt(context.content.split(' ')[2])
                     let guildMember = context.member;
-                    if (!amount) return context.reply('Must specify an amount to delete!');
-                    if (guildMember.roles.some(r => r.name === config.adminRole)) {
+                    if (!amount || amount >= 100) return context.reply('Must specify an amount of messages to delete. Max 99.');
+                    if (guildMember.roles.some(r => r.id === config.adminRole)) {
                         context.channel.fetchMessages({
                             limit: amount + 1,
                         }).then((msg: any) => {
@@ -77,13 +76,6 @@ export class Purge {
                     } else {
                         context.channel.send('You do not have permission to purge in this channel.');
                     }
-                } else {
-                    return context.channel.send('You do not have permission to purge this channel.').then((m: Message) => {
-                        setTimeout(() => {
-                            m.delete();
-                        }, 3000);
-                    })
-                }
             }
         })   
     }

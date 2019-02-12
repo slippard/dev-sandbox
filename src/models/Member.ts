@@ -27,7 +27,7 @@ export class Member {
                 user.repositories = [];
                 user.save(function (err) {
                     if (err) return console.log(err);
-                    (bot.guilds.get('456775919990865920').channels.get('509789262020083712') as TextChannel).send(username + ' has been registered in the database.');
+                    (bot.guilds.get(config.default_server).channels.get(config.modlog) as TextChannel).send(username + ' has been registered in the database.');
                 })
             } else {
                 DUser.updateOne({ userid: userid }, { $inc: { messageCount: 1 } }).then(function () { return })
