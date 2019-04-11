@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { Bool } from 'aws-sdk/clients/clouddirectory';
 
 export interface IUser extends mongoose.Document {
     username: string;
@@ -14,7 +13,7 @@ export interface IUser extends mongoose.Document {
     repositories?: Array<String>;
     vericode?: number;
   };
-  
+
   export const UserSchema = new mongoose.Schema({
     username: {type:String, required: true},
     userid: {type:String, required: true},
@@ -28,7 +27,7 @@ export interface IUser extends mongoose.Document {
     repositories: {type: Array, required: false},
     vericode: {type: Number, required: false}
   });
-   
+
   const DUser = mongoose.model<IUser>('User', UserSchema);
   export default DUser;
 

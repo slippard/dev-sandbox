@@ -1,7 +1,5 @@
-import { Client, Message, VoiceConnection, ClientUser, MessageReaction, Guild, TextChannel, Channel, Emoji } from "discord.js";
+import { Client, Message, MessageReaction, TextChannel, Emoji } from "discord.js";
 import { Command } from "./command";
-import User, { IUser } from './schemas/user';
-import { Member } from './models/Member';
 import * as net from 'net';
 import { config } from './config';
 import DUser from "./schemas/user";
@@ -12,7 +10,7 @@ export class Bot {
 
     constructor(token: string) {
         this.client = new Client();
-        this.client.on('message', this.handleMessage.bind(this)); 
+        this.client.on('message', this.handleMessage.bind(this));
         this.client.on('ready', this.ready.bind(this));
         this.client.on('emojiCreate', this.newEmoji.bind(this));
         this.client.on('messageReactionAdd', this.reactionAdd.bind(this));
@@ -33,7 +31,7 @@ export class Bot {
 
     private reactionAdd(reaction: MessageReaction) {
         let emojiInfo = `${reaction.emoji.name} | ${reaction.emoji.id}`
-        // console.log(emojiInfo);
+        console.log(emojiInfo);
     }
 
     private newEmoji(emoji: Emoji) {
